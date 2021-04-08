@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body{
+  background: #f7f5f2;
+}
+
+h1,h2,h3,h4,h5{
+  font-weight: 500;
+}
+
+.App {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1000px;
+  padding: 40px;
+}
+
+.form {
+  display: grid;
+}
+.label {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.input {
+  font-size: 1.6rem;
+  padding: 0.5rem 2rem;
+  line-height: 2.8rem;
+  border-radius: 100px;
+  background-color: white;
+  margin-bottom: 1rem;
+}
+
+.button {
+  background-color: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 1rem 2rem;
+  border: 1px solid rgba(0, 0, 0, 0.75);
+  border-radius: 20px;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: background-color 250ms;
+}
+
+.button:hover {
+  background-color: rgba(0, 0, 0, 0.85);
+}
+
+.form {
+  grid-template-columns: auto 1fr auto;
+  grid-gap: 1rem;
+  align-items: center;
+}
+.input {
+  margin-bottom: 0;
+}
+.card-list {
+  column-count: 3;
+}
+
+.card {
+  padding-bottom: 1.5rem;
+  position: relative;
+  display: flex;
+  -webkit-column-break-inside: avoid;
+  -moz-column-break-inside:avoid;
+  -moz-page-break-inside:avoid;
+  page-break-inside: avoid;
+}
+
+.card--image {
+  flex: 100%;
+  margin-top: 1rem;
+  border-radius: 10px;
+  width: 50%;
+  height: 50%;
+
+}
+
+.card .description{
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-weight: 500;
+  font-size: 1.5rem;
+  opacity: 0;
+  color: white;
+}
+
+.card:hover > .description{
+  opacity: 1;
+  transition: transform filter 0.4s ease-out;
+}
+
+.card:hover > img.card--image{
+  filter: blur(4px);
+}
+
+a{
+  text-decoration: none;
+  color: black;
+}
+
+.description .name{
+ font-weight: 500;
+}
+
+
+@media (min-width: 768px) {
+  .form {
+    grid-template-columns: auto 1fr auto;
+    grid-gap: 1rem;
+    align-items: center;
+  }
+  .input {
+    margin-bottom: 0;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+    .card-list {
+        column-count: 1;
+    }
+}
