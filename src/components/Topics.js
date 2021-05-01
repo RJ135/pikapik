@@ -1,23 +1,26 @@
-import React from 'react'
+import React, { memo, useMemo, useCallback } from 'react'
 
 
 
 const Topics = ({ topicsList, reachTopic }) => {
-    console.log("render Composant enfant Topics");
+    /* console.log("render Enfant Topics"); */
 
-    /* Trier Orde alphabetique */
-    /* const sortTopicsList = useMemo(
-        () => [...topicsList],
-        [topicsList]
-    ) */
+    const listTopics = useMemo(() => topicsList, [topicsList])
+
+    const handleReactTopic = useCallback(
+        (slug, title) => {
+            reachTopic(slug, title)
+        },
+        [reachTopic],
+    )
 
 
     return (
         <nav className='topic'>
             <ul className='topic--list'>
-                {topicsList.map((topicItem) => {
+                {listTopics.map((topicItem) => {
                     return <li className="topic--item" key={topicItem.id}>
-                        <a href="/#" title={topicItem.description} onClick={() => reachTopic(topicItem.slug, topicItem.title)}>
+                        <a href="/#" title={topicItem.description} onClick={() => handleReactTopic(topicItem.slug, topicItem.title)}>
                             {topicItem.title}
                         </a>
                     </li>
@@ -27,4 +30,4 @@ const Topics = ({ topicsList, reachTopic }) => {
     )
 }
 
-export default React.memo(Topics)
+export default memo(Topics)

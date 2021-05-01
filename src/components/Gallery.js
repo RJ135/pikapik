@@ -1,17 +1,16 @@
 import React from 'react'
+import TopicTitle from './TopicTitle'
+import Loader from './Loader'
 
-
-const Gallery = ({ pics, currentTopics, totalPics }) => {
-    console.log("render Composant enfant Gallery");
+const Gallery = ({ pics, totalPics, currentTopics }) => {
+    /* console.log("render Enfant Gallery"); */
 
     return (
         <section className="gallery">
-            <div className="gallery--top">
-                <h1 className='gallery--title'>{currentTopics}</h1>
-                <p> {totalPics}</p>
-            </div>
-
-
+            <TopicTitle
+                totalPics={totalPics}
+                currentTopics={currentTopics}
+            />
             <div className="card-list">
                 {pics.map((pic) =>
                     <div className="card" key={pic.id}>
@@ -22,15 +21,15 @@ const Gallery = ({ pics, currentTopics, totalPics }) => {
                         ></img>
                         <div className="card--description">
                             <a className="card--user" href={pic.user.links.portfolio}>{pic.user.name}</a>
-                            <p className="card--likes">❤️ {pic.likes}</p>
+                            <p className="card--likes">{pic.likes} ❤️</p>
                         </div>
                     </div>)
                 }
 
-
             </div>
+            <Loader />
         </section>
     )
 }
 
-export default React.memo(Gallery)
+export default Gallery

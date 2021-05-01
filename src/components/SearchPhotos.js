@@ -1,27 +1,42 @@
 
-import React from 'react'
+import React, { useCallback, useMemo } from 'react'
 
+const SearchPhotos = ({ searchPhotos, setQuery, query }) => {
 
-const SearchPhotos = ({ searchPhotos, query, setQuery }) => {
+    /* console.log("render Enfant SearchPhotos"); */
 
+    const handleQuery = useMemo(() => (query), [query])
 
-    console.log("render Composant enfant SearchPhotos");
+    const handleChange = useCallback(
+        (event) => {
+            const testInput = event.target.value
+            setQuery(testInput)
+        },
+        [setQuery],
+    )
+
+    const handleSubmit = useCallback(
+        (e) => {
+            searchPhotos(e)
+        },
+        [searchPhotos],
+    )
 
 
     return (
         <>
-            <form className="form" onSubmit={searchPhotos} >
+            <form className="form" onSubmit={handleSubmit} >
                 <label className="label" htmlFor="query">
-                    {" "}
-          📷
+                    {''}
+                📷
                 </label>
                 <input
-                    type="text"
+                    type="search"
                     name="query"
-                    className="input"
+                    value={handleQuery}
+                    className="input-search"
                     placeholder={`Try "dog" or "apple"`}
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
+                    onChange={handleChange}
                     autoComplete="off"
                 />
             </form>
@@ -30,4 +45,4 @@ const SearchPhotos = ({ searchPhotos, query, setQuery }) => {
     )
 }
 
-export default React.memo(SearchPhotos)
+export default SearchPhotos

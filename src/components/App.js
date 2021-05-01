@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, memo } from 'react'
 /* import '../style/App.css' */
 import '../style/App.css'
 import Gallery from './Gallery'
 import SearchPhotos from './SearchPhotos'
 import Topics from './Topics'
+import Loader from './Loader'
 import { createApi } from "unsplash-js";
 
 /* create api */
@@ -13,6 +14,7 @@ const unsplash = createApi({
 
 const App = () => {
 
+  /* console.log('render Parent App'); */
   const [pics, setPics] = useState([])
   const [query, setQuery] = useState("")
   const [topicsList, setTopicsList] = useState([])
@@ -20,27 +22,17 @@ const App = () => {
   const [totalPics, setTotalPics] = useState(0)
 
 
-  console.log(
-    "render Composant parent App",
-    `currentTopic = ${currentTopics === '' ? 'empty' : currentTopics}`,
-    `topicsList = ${topicsList.length === 0 ? 'empty' : 'full'}`,
-    `pics = ${pics.length === 0 ? 'empty' : 'full'}`,
-    `query = ${query === '' ? 'not typing' : 'typing'}`
-  );
-
-  /* TD : re-render SearchPhotos uniquement onsubmit / enter key*/
-
-
   /* TOPICS PHOTOS */
-  const fetchTopicPhotos = useCallback(async (slug) => {
+  /* Handle pick up a topics */
+  const reachTopic = useCallback(async (topicSlug, topicTitle) => {
+    /* console.log("trigger fx reachTopic"); */
     try {
       const res = await unsplash.topics.getPhotos({
-        topicIdOrSlug: slug,
-        orderBy: 'popular',
+        topicIdOrSlug: topicSlug,
         page: 1,
         perPage: 30,
       })
-      setCurrentTopics('People')
+      setCurrentTopics(topicTitle)
       setPics(res.response.results)
       setTotalPics(res.response.total)
     } catch (err) {
@@ -48,9 +40,8 @@ const App = () => {
     }
   }, [])
   useEffect(() => {
-    console.log("useEffect pics d'un topic");
-    fetchTopicPhotos('people')
-  }, [fetchTopicPhotos])
+    reachTopic('people', 'People')
+  }, [reachTopic])
 
   /* TOPICS LIST */
   const fetchTopicList = useCallback(async () => {
@@ -64,15 +55,15 @@ const App = () => {
       console.log(err)
     }
   }, [])
+
   useEffect(() => {
-    console.log('useEffect list topics');
     fetchTopicList()
   }, [fetchTopicList])
 
   /* Handle Search Photos*/
   const searchPhotos = useCallback(async (e) => {
-    e.preventDefault();
-    console.log("trigger fx searchPhotos");
+    /* console.log("trigger fx searchPhotos"); */
+    e.preventDefault()
     try {
       const res = await unsplash.search.getPhotos({
         query: query,
@@ -90,25 +81,9 @@ const App = () => {
   }, [query]);
 
 
-  /* Handle pick up a topics */
-  const reachTopic = useCallback(async (topicSlug, topicTitle) => {
-    console.log("trigger fx reachTopic");
-    try {
-      const res = await unsplash.topics.getPhotos({
-        topicIdOrSlug: topicSlug,
-        page: 1,
-        perPage: 30,
-      })
-      setCurrentTopics(topicTitle)
-      setPics(res.response.results)
-      setTotalPics(res.response.total)
-    } catch (err) {
-      console.log(err)
-    }
-  }, [])
 
   return (
-    <div className="App">
+    <div className="App" >
       <header className='header container'>
         <h1 className='title'>PIKAPIK</h1>
         <SearchPhotos
@@ -124,11 +99,14 @@ const App = () => {
           reachTopic={reachTopic}
           topicsList={topicsList}
         />
-        <Gallery
-          pics={pics}
-          currentTopics={currentTopics}
-          totalPics={totalPics}
-        />
+        {pics ?
+          <Gallery
+            pics={pics}
+            currentTopics={currentTopics}
+            totalPics={totalPics}
+          /> :
+          <Loader />
+        }
       </main>
 
     </div>
@@ -136,5 +114,5 @@ const App = () => {
 
 }
 
-export default App
+export default memo(App)
 
