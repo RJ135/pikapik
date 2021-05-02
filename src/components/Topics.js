@@ -1,32 +1,34 @@
 import React, { memo, useMemo, useCallback } from 'react'
 
 
-
 const Topics = ({ topicsList, reachTopic }) => {
     /* console.log("render Enfant Topics"); */
 
-    const listTopics = useMemo(() => topicsList, [topicsList])
+    const listTopics = useMemo((p) => p = topicsList, [topicsList])
 
     const handleReactTopic = useCallback(
-        (slug, title) => {
-            reachTopic(slug, title)
+        (e, slug, title, description) => {
+            e.preventDefault()
+            reachTopic(slug, title, description)
         },
         [reachTopic],
     )
 
 
     return (
-        <nav className='topic'>
-            <ul className='topic--list'>
-                {listTopics.map((topicItem) => {
-                    return <li className="topic--item" key={topicItem.id}>
-                        <a href="/#" title={topicItem.description} onClick={() => handleReactTopic(topicItem.slug, topicItem.title)}>
-                            {topicItem.title}
-                        </a>
-                    </li>
-                })}
-            </ul>
-        </nav>
+        <>
+            <nav className='topic'>
+                <ul className='topic--list'>
+                    {listTopics.map((topicItem) => {
+                        return <li className="topic--item" key={topicItem.id}>
+                            <a href="/#" title={topicItem.description} onClick={(e) => handleReactTopic(e, topicItem.slug, topicItem.title, topicItem.description)}>
+                                {topicItem.title}
+                            </a>
+                        </li>
+                    })}
+                </ul>
+            </nav>
+        </>
     )
 }
 

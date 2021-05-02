@@ -1,11 +1,19 @@
 import React from 'react'
+import Loader from './Loader';
 
-const TopicTitle = ({ totalPics, currentTopics }) => {
+const TopicTitle = ({ descTopic, totalPics, currentTopics }) => {
+
+    console.log(descTopic);
+
     /* console.log("render Enfant TopicTitle"); */
     return (
         <div className="gallery--top">
-            <h1 className='gallery--title'>{currentTopics}</h1>
-            <p>{totalPics ? totalPics : ''} </p>
+            <div>
+                <h1 className='gallery--title'>{currentTopics ? currentTopics : <Loader />}</h1>
+                < small > {totalPics ? totalPics : ''}</small>
+            </div>
+            <p> </p>
+            <p>{descTopic}</p>
         </div>
     )
 }

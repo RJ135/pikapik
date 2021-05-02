@@ -2,7 +2,7 @@ import React from 'react'
 import TopicTitle from './TopicTitle'
 import Loader from './Loader'
 
-const Gallery = ({ pics, totalPics, currentTopics }) => {
+const Gallery = ({ descTopic, pics, totalPics, currentTopics }) => {
     /* console.log("render Enfant Gallery"); */
 
     return (
@@ -10,6 +10,7 @@ const Gallery = ({ pics, totalPics, currentTopics }) => {
             <TopicTitle
                 totalPics={totalPics}
                 currentTopics={currentTopics}
+                descTopic={descTopic}
             />
             <div className="card-list">
                 {pics.map((pic) =>

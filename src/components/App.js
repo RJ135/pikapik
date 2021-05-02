@@ -5,12 +5,10 @@ import Gallery from './Gallery'
 import SearchPhotos from './SearchPhotos'
 import Topics from './Topics'
 import Loader from './Loader'
-import { createApi } from "unsplash-js";
+import unsplash from '../api/unsplashApi';
 
 /* create api */
-const unsplash = createApi({
-  accessKey: `${process.env.REACT_APP_ACCESSKEY}`
-});
+
 
 const App = () => {
 
@@ -20,27 +18,29 @@ const App = () => {
   const [topicsList, setTopicsList] = useState([])
   const [currentTopics, setCurrentTopics] = useState("")
   const [totalPics, setTotalPics] = useState(0)
-
+  const [descTopic, setDescTopic] = useState([])
 
   /* TOPICS PHOTOS */
   /* Handle pick up a topics */
-  const reachTopic = useCallback(async (topicSlug, topicTitle) => {
+  const reachTopic = useCallback(async (topicSlug, topicTitle, topicDesc) => {
     /* console.log("trigger fx reachTopic"); */
+
     try {
       const res = await unsplash.topics.getPhotos({
         topicIdOrSlug: topicSlug,
         page: 1,
         perPage: 30,
       })
-      setCurrentTopics(topicTitle)
-      setPics(res.response.results)
-      setTotalPics(res.response.total)
+      setCurrentTopics(p => p = topicTitle)
+      setPics(p => p = res.response.results)
+      setTotalPics(p => p = res.response.total)
+      setDescTopic(p => p = topicDesc)
     } catch (err) {
       console.log(err)
     }
   }, [])
   useEffect(() => {
-    reachTopic('people', 'People')
+    reachTopic('people', 'People', 'Real people, captured. Photography has the power to reflect the world around us, give voice to individuals and groups within our communities — and most importantly — tell their story.')
   }, [reachTopic])
 
   /* TOPICS LIST */
@@ -50,7 +50,7 @@ const App = () => {
         page: 1,
         perPage: 30,
       })
-      setTopicsList(res.response.results)
+      setTopicsList(p => p = res.response.results)
     } catch (err) {
       console.log(err)
     }
@@ -71,9 +71,9 @@ const App = () => {
         perPage: 30,
         order_by: 'popular',
       })
-      setPics(res.response.results)
-      setCurrentTopics(`Results for "${query}"`)
-      setTotalPics(res.response.total)
+      setPics(p => p = res.response.results)
+      setCurrentTopics(p => p = `Results for "${query}"`)
+      setTotalPics(p => p = res.response.total)
       setQuery('')
     } catch (err) {
       console.log(err)
@@ -98,12 +98,14 @@ const App = () => {
         <Topics
           reachTopic={reachTopic}
           topicsList={topicsList}
+
         />
         {pics ?
           <Gallery
             pics={pics}
             currentTopics={currentTopics}
             totalPics={totalPics}
+            descTopic={descTopic}
           /> :
           <Loader />
         }
