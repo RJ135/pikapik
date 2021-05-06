@@ -1,12 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
 
+:root{
+  --primary-color : #fafaf6;
+  --secondary-color : #1b1b1d;
+}
+
 @keyframes imgUpOnLoad {
   0% {
-    transform: translateY(2%);
     opacity: 0;
   }
   100% {
-    transform: translateY(0%);
     opacity: 1;
   }
 }
@@ -15,15 +18,15 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins',  sans-serif;
 }
 
 body{
-  background: #f7f5f2;
+  background: var(--secondary-color);
 }
 
 html{
-  overflow:scroll;
+  overflow-y:scroll;
 }
 
 h1,h2,h3,h4,h5{
@@ -31,39 +34,21 @@ h1,h2,h3,h4,h5{
 }
 
 a{
+  color: orange;
   text-decoration: none;
 }
 
+small{
+  font-weight: 300;
+}
 .container{
   padding: 0 400px;
   margin: 0 auto;
 }
-
-.main {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  padding-top: 100px;
-}
-
-.topic{
-  flex: 1;
-}
-
-.gallery{
-  display: block;
-  flex: 4;
-}
-
-.gallery--title{
-  display: block;
-  font-size: 2.5rem;
-  font-weight: 500;
-}
-
 .header{
-  background-color: white;
+  padding: 0 400px;
+  margin: 0 auto;
+  background-color: var(--primary-color);
   z-index: 8;
   position: fixed;
   width: 100%;
@@ -72,6 +57,59 @@ a{
   right: 0;
   margin: auto;
   display: flex;
+  animation: 0.4s ease-out 0s 1 imgUpOnLoad;
+}
+
+.main {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding-top: 125px;
+  color:  var(--primary-color);
+  width: 100%;
+  height: auto;
+}
+
+.topic{
+  flex: content;
+  width: 220px;
+  height: 800px;
+}
+
+.gallery{
+  flex: 4;
+  width: 100%;
+  height: 100%;
+}
+
+.gallery--title--container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gallery--top{
+  display: block;
+  width: 100%;
+  min-height: 140px ;
+  animation: 0.4s ease-out 0s 1 imgUpOnLoad;
+}
+
+.gallery--title{
+  display: block;
+  font-weight: 400;
+  font-size: 3rem;
+  height: 100%;
+  padding-right: 2rem;
+}
+
+.gallery--total{
+  font-weight: 300;
+  min-width: 58px;
+  min-height: 37px;
+  color: var(--primary-color);
 }
 
 .title{
@@ -82,6 +120,9 @@ a{
 .form {
   display: flex;
   justify-content: center;
+  width: 100%;
+  grid-gap: 1rem;
+  align-items: center;
 }
 .label {
   font-size: 2.5rem;
@@ -89,19 +130,16 @@ a{
 }
 
 .input-search {
-  font-size: 1.2rem;
+  font-size: 1rem;
   padding: 0rem 1.2rem;
   line-height: 2.8rem;
-  border-radius: 100px;
   background-color: white;
   margin-bottom: 1rem;
-  width: 500px;
+  width: 100%;
 }
 
 .input-search:focus{
   outline: none;
-  border: 3px black solid;
-  border-radius: 100px;
 }
 
 .button {
@@ -119,40 +157,39 @@ a{
   background-color: rgba(0, 0, 0, 0.85);
 }
 
-.form {
-  grid-template-columns: auto 1fr auto;
-  grid-gap: 1rem;
-  align-items: center;
-}
-
 .input-search {
   margin-bottom: 0;
 }
 
-.card-list {
+.card--list {
   padding-top: 2rem;
   column-count: 3;
-  grid-gap: 1rem;
+  gap: 1rem;
+  max-width: 4000px;
+  min-height: 1000px;
 }
+
 
 .card {
   position: relative;
   margin-bottom: 1rem;
   display: flex;
-  overflow: hidden;
   -webkit-column-break-inside: avoid;
   -moz-column-break-inside:avoid;
   -moz-page-break-inside:avoid;
   page-break-inside: avoid;
   animation: 0.4s ease-out 0s 1 imgUpOnLoad;
+  min-width: 100%;
+  min-height: 100%;
 }
 
 .card--image {
-  flex: 1;
   width: 100%;
+  height: 100%;
+  object-fit:cover;
 }
 
-.card .card--description{
+.card--description{
   position: absolute;
   top: 45%;
   left: 50%;
@@ -202,10 +239,11 @@ li.topic--item{
   list-style: none;
   width: auto;
   display: inline;
+  animation: 0.4s ease-out 0s 1 imgUpOnLoad;
 }
 
 .topic--item a{
-  color: black;
+  color:  var(--primary-color);
   cursor: pointer;
   display: inline-block;
   padding: 0.1rem 0;
@@ -230,10 +268,13 @@ li.topic--item{
     padding: 1rem;
     margin: 0;
   }
+  .card--list{
+    column-count: 2;
+  }
 }
 
 @media only screen and (max-width: 600px) {
-    .card-list {
+    .card--list {
         column-count: 1;
     }
     .container{

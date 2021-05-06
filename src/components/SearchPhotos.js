@@ -1,5 +1,7 @@
 
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, memo } from 'react'
+import loadable from '@loadable/component'
+const SearchInput = loadable(() => import('./SearchInput'));
 
 const SearchPhotos = ({ searchPhotos, setQuery, query }) => {
 
@@ -30,19 +32,14 @@ const SearchPhotos = ({ searchPhotos, setQuery, query }) => {
                     {''}
                 📷
                 </label>
-                <input
-                    type="search"
-                    name="query"
-                    value={handleQuery}
-                    className="input-search"
-                    placeholder={`Try "dog" or "apple"`}
-                    onChange={handleChange}
-                    autoComplete="off"
+                <SearchInput
+                    handleQuery={handleQuery}
+                    handleChange={handleChange}
+
                 />
             </form>
-
         </>
     )
 }
 
-export default SearchPhotos
+export default memo(SearchPhotos)

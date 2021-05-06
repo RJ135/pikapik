@@ -1,14 +1,29 @@
 import React, { useEffect, useState, useCallback, memo } from 'react'
-/* import '../style/App.css' */
+import loadable from '@loadable/component'
+
+/* Import Style */
 import '../style/App.css'
-import Gallery from './Gallery'
-import SearchPhotos from './SearchPhotos'
-import Topics from './Topics'
-import Loader from './Loader'
+
+/* special modules */
 import unsplash from '../api/unsplashApi';
+import parser from 'html-react-parser';
 
-/* create api */
+/* Components */
+/* import Loader from './Loader' */
 
+/* Lazy load components import */
+const Gallery = loadable(() => import('./Gallery'));
+const SearchPhotos = loadable(() => import('./SearchPhotos'));
+const TopicMenu = loadable(() => import('./TopicMenu'));
+
+
+/* TODO : Decouper architecture de l'app 
+et fragmenter dos style 
+et optimiser affichage img :
+voir https://www.smashingmagazine.com/2021/04/humble-img-element-core-web-vitals/
+voir Core Web Vitals
+
+*/
 
 const App = () => {
 
@@ -20,11 +35,10 @@ const App = () => {
   const [totalPics, setTotalPics] = useState(0)
   const [descTopic, setDescTopic] = useState([])
 
-  /* TOPICS PHOTOS */
+
   /* Handle pick up a topics */
   const reachTopic = useCallback(async (topicSlug, topicTitle, topicDesc) => {
     /* console.log("trigger fx reachTopic"); */
-
     try {
       const res = await unsplash.topics.getPhotos({
         topicIdOrSlug: topicSlug,
@@ -34,16 +48,18 @@ const App = () => {
       setCurrentTopics(p => p = topicTitle)
       setPics(p => p = res.response.results)
       setTotalPics(p => p = res.response.total)
-      setDescTopic(p => p = topicDesc)
+      setDescTopic(p => p = parser(topicDesc))
     } catch (err) {
       console.log(err)
     }
   }, [])
+
   useEffect(() => {
     reachTopic('people', 'People', 'Real people, captured. Photography has the power to reflect the world around us, give voice to individuals and groups within our communities — and most importantly — tell their story.')
   }, [reachTopic])
 
-  /* TOPICS LIST */
+
+  /* Handle list of topics*/
   const fetchTopicList = useCallback(async () => {
     try {
       const res = await unsplash.topics.list({
@@ -60,6 +76,7 @@ const App = () => {
     fetchTopicList()
   }, [fetchTopicList])
 
+
   /* Handle Search Photos*/
   const searchPhotos = useCallback(async (e) => {
     /* console.log("trigger fx searchPhotos"); */
@@ -72,9 +89,10 @@ const App = () => {
         order_by: 'popular',
       })
       setPics(p => p = res.response.results)
-      setCurrentTopics(p => p = `Results for "${query}"`)
+      setCurrentTopics(p => p = `Pictures of "${query}"`)
       setTotalPics(p => p = res.response.total)
-      setQuery('')
+      setQuery(p => p = '')
+      setDescTopic(p => p = '')
     } catch (err) {
       console.log(err)
     }
@@ -83,8 +101,9 @@ const App = () => {
 
 
   return (
-    <div className="App" >
-      <header className='header container'>
+    <div className="App container" >
+
+      <header className='header'>
         <h1 className='title'>PIKAPIK</h1>
         <SearchPhotos
           searchPhotos={searchPhotos}
@@ -93,25 +112,21 @@ const App = () => {
         />
       </header>
 
-
-      <main className="main container">
-        <Topics
+      <main className="main">
+        <TopicMenu
           reachTopic={reachTopic}
           topicsList={topicsList}
-
+          currentTopics={currentTopics}
         />
-        {pics ?
-          <Gallery
-            pics={pics}
-            currentTopics={currentTopics}
-            totalPics={totalPics}
-            descTopic={descTopic}
-          /> :
-          <Loader />
-        }
+        <Gallery
+          pics={pics}
+          currentTopics={currentTopics}
+          totalPics={totalPics}
+          descTopic={descTopic}
+        />
       </main>
-
     </div>
+
   );
 
 }

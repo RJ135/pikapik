@@ -1,6 +1,9 @@
-import React from 'react'
-import TopicTitle from './TopicTitle'
-import Loader from './Loader'
+import React, { memo } from 'react'
+import loadable from '@loadable/component'
+
+/* Code Splitting */
+const TopicTitle = loadable(() => import('./TopicTitle'))
+const Images = loadable(() => import('./Images'))
 
 const Gallery = ({ descTopic, pics, totalPics, currentTopics }) => {
     /* console.log("render Enfant Gallery"); */
@@ -12,25 +15,9 @@ const Gallery = ({ descTopic, pics, totalPics, currentTopics }) => {
                 currentTopics={currentTopics}
                 descTopic={descTopic}
             />
-            <div className="card-list">
-                {pics.map((pic) =>
-                    <div className="card" key={pic.id}>
-                        <img
-                            className="card--image"
-                            alt={pic.alt_description}
-                            src={pic.urls.small}
-                        ></img>
-                        <div className="card--description">
-                            <a className="card--user" href={pic.user.links.portfolio}>{pic.user.name}</a>
-                            <p className="card--likes">{pic.likes} ❤️</p>
-                        </div>
-                    </div>)
-                }
-
-            </div>
-            <Loader />
+            <Images pics={pics} />
         </section>
     )
 }
 
-export default Gallery
+export default memo(Gallery)

@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/App';
+import loadable from '@loadable/component'
 import reportWebVitals from './reportWebVitals';
+
+const App = loadable(() => import('./components/App'));
 
 ReactDOM.render(
   <App />,
